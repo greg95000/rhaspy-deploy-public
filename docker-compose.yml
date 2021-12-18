@@ -2,6 +2,13 @@ version: "3"
 
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
+  open-vpn:
+    image: kylemanna/openvpn
+    ports:
+      - '443:1194'
+    volumes: -'./openvpn/etc-openvpn:/etc/openvpn'
+    cap_add:
+      - NET_ADMIN
   nginx:
     container_name: nginx-proxy
     image: nginx:latest

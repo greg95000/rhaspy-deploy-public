@@ -17,6 +17,7 @@ create_directories() {
     mkdir -p ./nginx/etc-ssl/public
     mkdir -p ./pi-hole/etc-dnsmasq.d
     mkdir -p ./pi-hole/etc-pihole
+    mkdir -p ./openvpn/etc-openvpn
 }
 
 generate_kpi() {
@@ -50,6 +51,11 @@ filter_youtube_ads() {
 
 }
 
+configure_openvpn() {
+    docker run -v $PWD/openvpn/etc-openvpn/:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u tcp://greg95000.hopto.org:443
+    docker run -v $PWD/openvpn/etc-openvpn/:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki
+}
+
 main() {
     CREATE_DIRECTORY=false
     GENERATE_KPI=false
@@ -65,6 +71,9 @@ main() {
             ;;
             "--filter-youtube-ads" )
                 filter_youtube_ads
+            ;;
+            "--configure-vpn")
+                configure_openvpn
             ;;
             "--help" )
                 display_help
